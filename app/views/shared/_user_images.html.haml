@@ -1,0 +1,4 @@
+- size ||= '36x36'
+%ul.list_user_images
+  - users.each do |user|
+    %li.user_image= image_link_to_user(user, { :size => size }, { :class => 'vtip', :title => user.name })

@@ -1,0 +1,17 @@
+= no_sidebar
+.settings_column
+  .content_header
+    %h1#page_title プロフィールを設定しましょう
+  .content
+    %section#setting_new_user_sec
+      #setting_new_user_box
+        #setting_navigation
+          %ul
+            %li
+              %a 大学
+            %li
+              %a 学部
+            %li
+              %a 入学年度
+        #setting_steps
+          = render 'form'

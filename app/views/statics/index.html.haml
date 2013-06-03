@@ -1,0 +1,33 @@
+= no_sidebar
+.front_column
+  #welcome_box
+    #visual_box
+      %hgroup
+        %h1 Lecanaで、講義情報を共有
+        %h2 毎日の大学生活を、より濃く、より深く
+    #signin_box
+      %b
+        Lecanaをはじめましょう
+        %span (無料)
+      = link_to 'Twitterでサインイン', '/auth/twitter', :class => 'signin_nav_button_tw button'
+      = link_to 'Facebookでサインイン', '/auth/facebook', :class => 'signin_nav_button_fb button'
+      .user_images
+        %div.line
+          %span Lecanaを利用中
+        = render 'shared/user_images', :users => @users 
+  #intro_box
+    %section#intro_sec
+      %h1 <strong>Lecana</strong>でできるコト
+      %ul
+        %li
+          %h2 時間割を共有する
+          %p 自分の時間割を公開したり他の利用者の時間割を見ることができます。同じ講義を受講している人を調べたり、友人の時間割の空きコマを確認して待ち合わせに使ったりもできます。
+        %li        
+          %h2 講義の情報を共有する
+          %p 講義に関するあらゆる情報を共有できます。試験情報を友達と共有したり、レビューを見て講義の評判を調べたり、アップロードされた資料を見て試験対策に役立てたりできます。
+        %li        
+          %h2 講義についてつぶやく
+          %p あなたが聞いたこと、感じたこと、考えたことをリアルタイムに書きこむことができます。同じ講義を取っている友達とコミュニケーション。聞き逃してしまった情報もこれで解決。
+      %p.notice ※対応大学：京都大学（全国の大学に拡大予定）
+
+          

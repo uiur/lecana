@@ -1,0 +1,9 @@
+.right_column
+  .content
+    %section
+      %h1= "登録科目のアクティビティ"
+      #activity_box
+        = render 'shared/activities', :activities => @activities
+      
+      = paginate @activities
+      

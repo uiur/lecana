@@ -1,0 +1,23 @@
+defaults: &defaults
+  twitter_key: 'secret'
+  twitter_secret: 'secret'
+  year: 2012
+  term: 2
+
+development:
+  <<: *defaults
+  facebook_key: 'secret'
+  facebook_secret: 'secret'
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
+  facebook_key: 'secret'
+  facebook_secret: 'secret'
+
+kegani:
+  <<: *defaults
+  facebook_key: 'secret'
+  facebook_secret: 'secret'

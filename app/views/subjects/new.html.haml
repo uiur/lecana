@@ -1,0 +1,8 @@
+.right_column
+  %section#edit_subject_sec
+    .content
+      .content_header
+        %h1#page_title 科目を新規作成...
+        = link_to '戻る', subjects_path, :class => 'edit_subject_button_return'
+      #edit_subject_box
+        = render 'form'

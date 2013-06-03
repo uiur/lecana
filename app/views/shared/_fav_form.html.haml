@@ -1,0 +1,9 @@
+- fav = favable.faved_by(current_user)
+- if fav
+  .fav_form.fav_remove
+    = form_tag remove_fav_path(fav), :remote => true, :method => :delete do
+      = submit_tag 'Good!を解除', :class => 'fav_button fav_button_remove'
+- else
+  .fav_form.fav_add
+    = form_tag add_fav_path(favable), :remote => true do
+      = submit_tag 'Good!', :class => 'fav_button fav_button_add'

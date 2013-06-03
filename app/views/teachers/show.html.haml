@@ -1,0 +1,9 @@
+%section.teacher
+  .page-header
+    %p#notice= notice
+    %h1=@teacher.name
+  
+  .row
+    %ul
+      - @teacher.subjects.each do |subject|
+        %li=link_to subject.name, subject_path(subject)

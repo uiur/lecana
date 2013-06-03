@@ -1,0 +1,19 @@
+.right_column
+  .content
+    .content_header
+      %h1#page_title= "#{@subject.name}のノート情報"
+    %section#note_revision_sec
+      %h1 このノートの履歴
+      %table#note_revision_table
+        %thead
+          %tr
+            %th.note_revision_cell_date 更新日時
+            %th.note_revision_cell_fav Good!
+          - @notes.each do |note|
+            %tr.note_revision_row
+              %td.note_revision_cell_date= link_to format_time(note.created_at), subject_note_path(note.subject, note)
+              %td.note_revision_cell_fav{:id => "favs_#{note.class.to_s.underscore}_#{note.id}"}= render 'shared/favs', :favs => note.favs
+    %section#noteinfo_editors_sec
+      %h1 このノートの編集者
+      #editors_box
+        = render 'shared/users', :users => Note.authors(@subject)

@@ -1,0 +1,12 @@
+.right_column
+  .content
+    .content_header
+      %h1#page_title= "#{@subject.name}のノート"
+      %ul.noteinfo_list
+        %li.note_subject= link_to_subject @subject
+        %li.note_editor
+          = image_link_to_user( @note.user, { :size => '16x16' }, {})
+          = link_to_user @note.user
+    %section#note_sec
+      #note_box
+        = render 'subjects/note', :note => @note, :subject => @subject

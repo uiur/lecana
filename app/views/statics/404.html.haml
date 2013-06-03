@@ -1,0 +1,18 @@
+= no_sidebar
+.single_column
+  .content
+    .content_header
+      %hgroup
+        %h1 404 Not Found
+        %h2 ページが見つかりません  
+    %section#box_404
+      .left
+        = image_tag 'img_404.png'
+      .right
+        %h1.sec_title なんでやねん
+        %p 次のような可能性があります
+        %ul
+          %li ページが移動・削除されている
+          %li リンクのURLが間違っている
+        %p 上部メニューのロゴか、次のリンクをクリックするとLecanaのトップページに戻ります。
+        %p= link_to "トップページに戻る", root_path

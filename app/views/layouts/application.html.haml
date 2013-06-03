@@ -1,0 +1,128 @@
+!!!
+%html(xmlns:og='http://ogp.me/ns#' xmlns:fb='http://www.facebook.com/2008/fbml' :itemscope itemtype='http://schema.org/Webサービス'){html_attrs('ja')}
+  %head
+    %meta{:charset => 'utf-8'}
+    - default_title = 'Lecana'
+    %title= content_for?(:title) ? "#{yield(:title)} - #{default_title}" : default_title
+    = javascript_include_tag "application"
+    /[if lt IE 9]
+      %script{:src => "http://ie7-js.googlecode.com/svn/version/2.1(beta4)/IE9.js"}
+    = stylesheet_link_tag    "application"
+    = csrf_meta_tags
+    = favicon_link_tag 'favicon.ico'
+
+    -# SEO
+    %meta{:name => 'description', :content => 'Lecanaは、大学での学びをサポートする講義情報共有サービスです。自分の時間割を登録して友達に公開できたり、気になる講義の評価を調べたりすることができます。'}
+    %meta{:name => 'keywords', :content => '大学,学習,ツール,Webサービス,講義,レビュー,時間割,京都大学,京大'}
+
+    -# OGP
+    %meta{:property => "og:title", :content => content_for?(:title) ? yield(:title) : default_title}
+    %meta{:property => "og:type", :content => "product"}
+    %meta{:property => "og:url", :content => "http://lecana.net"}
+    %meta{:property => "og:image", :content => asset_path('logo_180x180.png')}
+    %meta{:property => "og:site_name", :content => default_title}
+    -# adminユーザーの設定は保留 %meta{:property="fb:admins", :content=""}
+
+    -# Google+1用
+    %meta{:itemprop => "name", :content => "Lecana - まったく新しい講義情報共有サービス"}
+    %meta{:itemprop=>"description", :content => "Lecanaは大学の講義情報をみんなで共有するWebサービスです"}
+    
+    -# Google Analytics
+    <script type="text/javascript">var _gaq = _gaq || [];_gaq.push(['_setAccount', 'UA-30464755-1']);_gaq.push(['_trackPageview']);(function() {var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);})();</script>
+  - state = ''
+  - if signed_in?
+    - state = 'signed_in'
+  - else
+    - state = 'not_signed_in'
+  %body{:class => state}
+    -# いいねボタン用
+    <div id="fb-root"></div><script>(function(d, s, id) { var js, fjs = d.getElementsByTagName(s)[0]; if (d.getElementById(id)) return; js = d.createElement(s); js.id = id; js.src = "//connect.facebook.net/ja_JP/all.js#xfbml=1"; fjs.parentNode.insertBefore(js, fjs); }(document, 'script', 'facebook-jssdk'));</script>
+
+    #page
+      %header#page_header
+        .wrapper
+          %h1#site_name
+            = link_to "Lecana", root_path
+          %nav#page_nav
+            %ul#global_nav
+              %li#global_nav_subjects= link_to "講義を見る", subjects_path(:year => params[:year], "term_#{params[:term]}".intern => true), :class => 'button'
+              %li#global_nav_user_search
+                %a.button#h_user_search_button ユーザー検索
+                #h_user_search_box_wrapper
+                  #h_user_search_box
+                    = form_tag users_path, :method => :get do
+                      = text_field_tag :search, params[:search], :id => 'h_user_search_textfield'
+                      = submit_tag '検索', :name => nil, :id => 'h_user_search_button_submit'
+              %li#global_nav_account
+                - if signed_in?
+                  - if current_user.name
+                    %a#h_user_nav_button.button= current_user_image(size: '24x24')
+                    #h_user_nav_wrapper
+                      %ul#h_user_nav
+                        %li= link_to "#{current_user.name}さんのページ", user_path(current_user)
+                        %li= link_to "プロフィール設定", '/settings/edit'
+                        %li= link_to 'サインアウト', logout_path
+                        =# %li.separate
+                        =# %li
+                        =#   %a ヘルプ
+                - else
+                  %a.button サインイン
+                  #h_signin_box_wrapper
+                    #h_signin_box
+                      %b Lecanaをはじめましょう
+                      %p 以下のリンクからサインインできます
+                      = link_to 'Twitterでサインイン', '/auth/twitter', :class => 'signin_nav_button_tw'
+                      = link_to 'Facebookでサインイン', '/auth/facebook', :class => 'signin_nav_button_fb'
+
+      #notice
+        .wrapper
+          #notice_box
+            #notice_balloon_wrapper
+              - flash.each do |name, msg|
+                #notice_balloon.alert-message.small(class='#{name}')
+                  = msg
+                  %a#notice_button_close ×
+  
+      #page_content
+        .wrapper
+          - unless content_for? :no_sidebar
+            - if content_for? :sidebar
+              .left_column
+                = yield :sidebar
+            - else
+              - if signed_in?
+                .left_column
+                  = render 'users/side_timetable', :timetable => current_user.timetable(params[:term], params[:year])
+              - else
+                .left_column
+                  %section#s_intro_sec
+                    %h1.sec_title Lecanaに登録すれば、<br>できること広がる
+                    %p Lecanaは<b>時間割</b>と<b>講義情報</b>を<b>共有</b>するサービスです
+                    %h2 登録は簡単
+                    .signin_box
+                      %b Lecanaをはじめましょう
+                      = link_to 'Twitterでサインイン', '/auth/twitter', :class => 'signin_nav_button_tw'
+                      = link_to 'Facebookでサインイン', '/auth/facebook', :class => 'signin_nav_button_fb'
+          = yield
+  
+      %footer#page_footer
+        .wrapper
+          .share_buttons
+            -# ツイートボタン
+            .share_tw
+              <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://lecana.net/" data-lang="ja">ツイート</a><script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+            -# いいねボタン
+            .share_fb
+              <div class="fb-like" data-href="http://lecana.net" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+
+            -# Google+1ボタン
+            .share_gp
+              <g:plusone size="medium" href="http://lecana.net"></g:plusone><script type="text/javascript">window.___gcfg = {lang: 'ja'}; (function() { var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true; po.src = 'https://apis.google.com/js/plusone.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s); })();</script>
+
+            -# はてブボタン
+            .share_hb
+              <a href="http://b.hatena.ne.jp/entry/http://lecana.net/" class="hatena-bookmark-button" data-hatena-bookmark-title="Lecana" data-hatena-bookmark-layout="standard" title="このエントリーをはてなブックマークに追加"><img src="http://b.st-hatena.com/images/entry-button/button-only.gif" alt="このエントリーをはてなブックマークに追加" width="20" height="20" style="border: none;" /></a><script type="text/javascript" src="http://b.st-hatena.com/js/bookmark_button.js" charset="utf-8" async="async"></script>
+
+          %p.copyright
+            == Copyright © 2012 #{link_to "Lecana", about_path} All Rights Reserved

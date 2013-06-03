@@ -1,0 +1,49 @@
+.right_column
+  %section#subjects_sec
+    #searchfrm_box
+      %h2 検索
+      %fieldset
+        = form_tag subjects_path, :method => :get do
+          %check_boxes
+            - @ord_scope.each do |term|
+              %label{:for => "term_#{term}"}
+                = check_box_tag "term_#{term}", term, (@checked_terms.empty? ? term == TERM : @checked_terms.include?(term))
+                = Term.detect(:ord => term).to_s
+          = select_tag :year, options_for_select(@years, params[:year])
+          %br
+          .searchfrm_input_wrapper
+            = text_field_tag :search, params[:search], :class => 'searchfrm_input'
+            = submit_tag '検索', :name => nil, :class => 'searchfrm_button'
+    #subjects_box
+      - if @subjects.empty?
+        .subjects_box_empty
+          %b 見つかりませんでした
+          %p
+            他のキーワードで検索するか
+            = link_to '科目を新規作成...', new_subject_path
+      - else
+        %table#subjects_table
+          %tr
+            %th.subjects_cell_info1 科目
+            %th.subjects_cell_info2 場所/曜時限
+            %th.subjects_cell_review レビュー
+            %th.subjects_cell_register
+  
+          - @subjects.each do |subject|
+            %tr.subjects_row
+              %td.subjects_cell_info1
+                .subject_name= link_to subject.name, subject_path(subject)
+                .subject_teacher= subject.teacher_names.join(",")
+              %td.subjects_cell_info2
+                .subject_room= subject.room(params[:year])
+                .subject_periods= subject.periods(params[:year]).join(", ")
+              %td.subjects_cell_review
+                .subject_review
+                  .subject_review_count= "#{subject.reviews.count}件"
+                  .subject_review_rate
+                    .reviews_star{:rating => "#{subject.rating_average}"}
+              %td.subjects_cell_register
+                %div{:id => "register_#{subject.id}", :class => 'subject_register'}
+                  = render 'register', :subject => subject, :year => params[:year]
+        = paginate @subjects
+      

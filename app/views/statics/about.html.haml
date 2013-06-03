@@ -1,0 +1,53 @@
+= no_sidebar
+= content_for :title do
+  Lecanaについて
+
+.single_column
+  .content
+    .content_header
+      %hgroup
+        %h1 Lecana [レカナ] について
+        %h2 About Lecana
+    %section
+      %h1 Lecana = Lecture + Canal
+      %p
+        = image_tag("logo_300x80.png", :class => "right frame")
+        知識の泉から湧き出る水を、人から人へ、運ぶ<br>
+        Lecanaは、あなたの大学での学びをサポートする、講義情報共有サービスです<br>
+    %section
+      %h1 運営チーム
+      %p Lecanaは京都大学の学生3人によって開発・運営されています
+      %ul.prof_list
+        %li
+          .prof_header
+            .left
+              = image_tag("prof_uiureo.png")
+            .right
+              .name <b>uiureo</b> - エンジニア
+              .links Twitter:<a href="http://twitter.com/#!/uiureo" target="_blank">@uiureo</a> / Blog:<a href="http://uiureo.hatenablog.com" target="_blank">uiureo.hatenablog.com</a>
+          .prof_text
+            朝寝て夕方起きるのが得意。工学部情報学科2回生
+        %li
+          .prof_header
+            .left
+              = image_tag("prof_tnn_jp.png", :class => "prof_image")
+            .right
+              .name <b>Tanini</b> - デザイナー
+              .links Twitter:<a href="http://twitter.com/#!/tnn_jp" target="_blank">@tnn_jp</a> / Blog:<a href="http://d.hatena.ne.jp/tnn-jp/" target="_blank">d.hatena.ne.jp/tnn-jp/</a>
+          .prof_text
+            デザインとフロントエンドを担当。洗濯物を取り入れて畳まないのが得意。工学部情報学科2回生
+        %li
+          .prof_header
+            .left
+              = image_tag("prof_hidesys.png", :class => "prof_image")
+            .right
+              .name <b>hidesys</b> - サーバーエンジニア
+              .links Twitter:<a href="http://twitter.com/#!/hidesys" target="_blank">@hidesys</a> / 思想地図:<a href="http://hidesys.net/" target="_blank">hidesys.net/</a>
+          .prof_text
+            サーバー運営とモルドバ駐在を担当。自己批判が得意。農学部食料環境経済学科4回生
+
+    %section
+      %h1 連絡先
+      %p
+        サービスに関する質問やご要望などは、以下のアドレスにご連絡ください。<br>
+        info[at]lecana.net

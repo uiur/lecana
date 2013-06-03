@@ -1,0 +1,13 @@
+.favs
+  - if signed_in?
+    .favs_count
+      = favs.count
+    -if favs.count > 0
+      .favs_users
+        = render 'shared/user_images', :users => favs.map(&:user), :size => '24x24'
+  - else
+    .favs_count.not_signed_in
+      = favs.count
+    -if favs.count > 0
+      .favs_users
+        = render 'shared/user_images', :users => favs.map(&:user), :size => '24x24'

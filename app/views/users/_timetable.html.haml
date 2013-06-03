@@ -1,0 +1,52 @@
+- @day_no = 1..5
+- @hour_no = 1..5
+
+#tt_box
+  %h2= "#{params[:year]}年度#{Term.detect(ord: params[:term])}"
+  %table{id: 'tt_timetable', class: "tt_#{@day_no.to_a.size}_days"}
+    %tr
+      %th.tt_cell_blank
+      - @day_no.each do |day_no|
+        %th.tt_cell_day= day(day_no)
+    - @hour_no.each do |hour_no|
+      %tr{class: 'tt_row_h_' + hour_no.to_s}
+        %th.tt_cell_hour= hour_no
+        - @day_no.each do |day_no|
+          %td.tt_cell_info{class: 'cell_' + day_no.to_s + '-' + hour_no.to_s}
+            .tt_box_item{class: 'tt_box_item_' + day_no.to_s + '-' + hour_no.to_s}
+              - @timetable[Period.detect(day: day_no, ord: hour_no)].each_with_index do |info,i|
+                - if i == 0
+                  .tt_box_lecture.tt_current_lecture
+                    .tt_box_name= link_to_subject info.subject, {:class => 'vtip', :title => info.subject.name}
+                    %dl.tt_box_data
+                      %dt 場所
+                      %dd= info.room
+                      %dt 教員
+                      %dd= info.teacher_names.join(', ')
+                - else
+                  .tt_box_lecture
+                    .tt_box_name= link_to_subject info.subject, {:class => 'vtip', :title => info.subject.name}
+                    %dl.tt_box_data
+                      %dt 場所
+                      %dd= info.room
+                      %dt 教員
+                      %dd= info.teacher_names.join(', ')
+            .tt_nav_item
+              %a{class: 'tt_button_prev_lecture vtip', title: '前の講義'} &laquo
+              =link_to '+', subjects_path(:search => Period.detect(:day => day_no, :ord => hour_no).to_s), {:class => 'tt_button_add_lecture vtip', :title => '講義を追加'}
+              %a{class: 'tt_button_next_lecture vtip', title: '次の講義'} &raquo
+    %tr.tt_row_other
+      %th そ<br>の<br>他
+      %td{colspan: "#{@day_no.to_a.size}"}
+        - @timetable[Period.detect(Period::OTHER)].each do |info|
+          .tt_box_lecture
+            .tt_box_name
+              = link_to_subject info.subject
+            %dl.tt_box_data
+              %dt 場所
+              %dd= info.room
+              %dt 教員
+              %dd= info.teacher_names.join(', ')
+
+        .tt_box_lecture_add
+          = link_to '[+] 講義を追加', subjects_path(:search => Period.detect(Period::OTHER).to_s), {:class => 'tt_button_add_lecture'}

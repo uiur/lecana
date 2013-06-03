@@ -1,0 +1,2 @@
+$("#fav_form_<%= @favable.class.to_s.underscore %>_<%= @favable.id %>").html("<%=j(render 'shared/fav_form', :favable => @favable) %>")
+$("#favs_<%= @favable.class.to_s.underscore %>_<%= @favable.id %>").html("<%=j(render 'shared/favs', :favs => @favable.favs) %>")

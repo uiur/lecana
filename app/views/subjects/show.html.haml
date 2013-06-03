@@ -1,0 +1,124 @@
+= content_for :title do
+  = @subject.name
+.right_column
+  -# Feedはとりあえず未実装に
+  =# auto_discovery_link_tag(:atom)
+  
+  .content
+    .content_header
+      %h1#page_title= @subject.name
+      #s_nav
+        #s_nav_year
+          %b
+            #{params[:year]}年度
+          %a#s_button_year 他の年度
+          %ul#s_list_year
+            - @years.each do |year|
+              - if params[:year].to_i == year
+                %li.current_year= "#{year}年度"
+              - else
+                %li= link_to "#{year}年度", subject_path(@subject.id, year)
+        #s_nav_register
+          %div{:id => "register_#{@subject.id}"}
+            = render 'register', :subject => @subject, :year => @year
+
+    .column_1
+      %section#si_sec
+        %h1 講義情報
+        #si_box
+          %table
+            %tr
+              %th 科目名
+              %td= @subject.name
+            - if @teachers.any?
+              - @teachers.each do |teacher|
+                %tr  
+                  %th 教員
+                  %td.si_cell_teacher= link_to teacher.name, subjects_path(:search => teacher.name)
+            %tr
+              %th 場所
+              %td= @subject.room(@year)
+            - if @periods.any?          
+              %tr
+                %th 曜時限
+                %td= @periods.join(", ")
+            - if @terms.any?
+              %tr
+                %th 学期
+                %td= @terms.join(", ")
+            %tr
+              %th 年度
+              %td= @year
+            %tr
+              %th 評価
+              %td
+                .reviews_star{:rating => "#{@subject.rating_average}"}
+            %tr
+              %th タグ
+              %td.si_cell_tag
+                %ul.si_list_tag
+                  - @subject.tag_list.each do |tag|
+                    %li
+                      = link_to tag, subjects_path(:search => tag), :class => "si_tag_link"
+                      = link_to("x", subject_remove_tag_path(:subject_id => @subject.id, :tag => tag), :class => 'si_tag_remove',
+                                :confirm => "#{tag} を消します", :method => "delete")
+                = form_tag subject_create_tag_path(:subject_id => @subject.id) do
+                  = text_field_tag 'tag', nil, :class => 'si_input_tag'
+                  = submit_tag 'タグ追加', :class => 'si_submit_tag'
+
+      %section#susri_sec
+        %h1 登録しているユーザー
+        #susri_box
+          = render 'shared/user_images', :users => @users
+
+    .column_2
+      #tab_box
+        %ul
+          %li
+            %a{ href: '#tab_home' } ホーム
+          %li
+            %a{ href: '#tab_review' } レビュー
+          %li
+            %a{ href: '#tab_note' } パブリックノート
+          %li
+            %a{ href: '#tab_file' } ファイル
+        #tab_home
+          %section#home_sec
+            - if signed_in?
+              #postfrm_box
+                = render 'shared/post_form', :post => @post, :subject => @subject
+            #post_box
+              = render 'posts/posts', :posts => @posts
+              = paginate @posts, :param_name => "posts_page"
+        #tab_review
+          %section#review_sec
+            #revfrm_box
+              - if signed_in?
+                = render 'reviews/form', :subject => @subject, :review => @review
+              - else
+                .revfrm_box_notlogin
+                  %p ログインしてレビューを書きましょう！
+                
+            #rev_box
+              = render 'reviews/reviews', :reviews => @reviews
+              = paginate @reviews, :param_name => "reviews_page"
+
+        #tab_note
+          %section#note_sec
+            #note_box
+              = render 'note', :note => @note, :subject => @subject
+
+        #tab_file
+          %section#file_sec
+            - if signed_in?
+              %h2 ファイルをアップロードする
+              #file_upload_box
+                = render 'upload_form', :subject => @subject, :upload => @upload
+              %h2 ファイル一覧
+              #file_box
+                = render 'uploads', :uploads => @subject.uploads
+            - else
+              #file_box
+                #file_box_notlogin
+                  %b ログインが必要です
+                  %p ファイル機能を使うためにはログインしてください

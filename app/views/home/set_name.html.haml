@@ -1,0 +1,11 @@
+.settings_column
+  .content
+    .content_header
+      %h1#page_title
+        表示名を設定しましょう
+        %span（英数字で2文字以上20文字以内）
+    #setting_user_name_box
+      = form_for @user, :url => update_name_path do |f|
+        = f.text_field :name, :hint => '英数字で2文字以上20文字以内です'
+        = f.submit '設定', :id => 'setting_user_name_button_submit'
+  

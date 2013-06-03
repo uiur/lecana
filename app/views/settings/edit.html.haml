@@ -1,0 +1,16 @@
+.right_column
+  .settings_column
+    .content_header
+      %h1#page_title プロフィール設定
+    .content
+      #setting_user_box
+        = semantic_form_for @setting, :url => settings_path do |f|
+          = f.inputs do 
+            -# 大学は変更できなくてよい
+            =# f.input :college, :include_blank => false
+            #faculties_select
+              = render 'faculties', :form => f
+            - years = [*(13..24)]
+            = f.input :entered_at, :as => :select, :collection => Hash[years.map {|year| '平成' + year.to_s + '年度'}.zip(years)]
+            = f.buttons do
+              = f.commit_button '設定', :button_html => {:id => 'setting_user_button_commit'}

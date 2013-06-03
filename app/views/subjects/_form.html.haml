@@ -1,0 +1,55 @@
+= semantic_form_for @subject do |f|
+  -if @subject.errors.any?
+    #error_explanation
+      %h2= "#{@subject.errors.count}つの項目を修正してください。"
+      %ul
+        - @subject.errors.full_messages.each do |msg|
+          %li= msg
+
+  .edit_subject_frm_row.edit_subject_name_box
+    = f.inputs do 
+      = f.input :name, :label => '科目名'
+
+  .edit_subject_frm_row.edit_subject_college_box
+    = f.inputs do 
+      = f.input :college, :include_blank => false, :label => '大学'
+
+  .edit_subject_frm_row.edit_subject_teachers_box
+    .input
+    = f.semantic_fields_for :teachers do |t|
+      = render 'teacher_fields', :f => t
+      .edit_subject_teachers_navi
+        = link_to_add_association '教員を追加...', f, :teachers, :class => 'edit_subject_button_add_teacher'
+
+  .edit_subject_frm_row.edit_subject_room_term_box
+    = f.semantic_fields_for :subject_infos do |i|
+      = i.inputs do
+        = i.input :room, :label => '場所'
+        = i.input :terms, :for => :terms, :as => :select, :collection => Term.active, :label => '開講期'
+        = i.input :year, :as => :select, :collection => [2012], :include_blank => false, :label => '年度'
+    =# i.input :periods, :for => :periods, :collection => Period.ranged(1..5,1..5), :as => :check_boxes
+  .edit_subject_frm_row.edit_subject_dayhour_box
+    %label 曜時限
+    .input
+      - row = 1..5
+      - column = 1..5
+      - period_ids = @subject.info.try(:period_ids) || []
+      %table
+        %thead
+          %tr
+            %th.blank  
+            - column.each do |d|
+              %th= day(d)
+        %tbody
+          - row.each do |o|
+            %tr
+              %th= o
+              - column.each do |d|
+                %td
+                  - period = Period.detect(day: d, ord: o)
+                  - label_id = sanitize_to_id('subject[subject_infos_attributes][0][period_ids][]') + period.id.to_s
+                  = check_box_tag 'subject[subject_infos_attributes][0][period_ids][]', period.id, period_ids.include?(period.id), :id => label_id
+             
+  .actions
+    = f.buttons do
+      = f.commit_button :label => '完了', :button_html => {:class => 'edit_subject_button_submit'}

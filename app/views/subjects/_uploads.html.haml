@@ -1,0 +1,18 @@
+%table#uploads.tablesorter
+  %thead
+    %tr
+      %th.file_cell_name.header 名前
+      %th.file_cell_filename.header ファイル名
+      %th
+  - if uploads.size == 0
+    %tr
+      %td.file_cell_empty{ :colspan => 3 }
+        %b ファイルはまだアップロードされていません
+  - else
+    - uploads.each do |upload|
+      %tr
+        %td.file_cell_name= link_to upload.name, upload.file.url, :class => 'vtip', :title => upload.name, :target => '_blank'
+        %td.file_cell_filename= link_to File.basename(upload.file.url), upload.file.url, :class => 'vtip', :title => File.basename(upload.file.url), :target => '_blank'
+        %td.file_cell_remove
+          - if signed_in? && current_user.have?(upload)
+            = link_to 'このファイルを削除...', subject_upload_path(upload.subject, upload), :class => 'file_button_remve', :method => :delete, :confirm => 'このファイルを削除してよろしいですか？'

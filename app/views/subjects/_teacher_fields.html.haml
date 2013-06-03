@@ -1,0 +1,4 @@
+.nested-fields
+  = f.inputs do
+    = f.input :name, :label => '教員' #, :as => :autocomplete, :url => autocomplete_teacher_name_teachers_path
+    = link_to_remove_association "この教員を削除...", f, :class => 'edit_subject_button_remove_teacher'

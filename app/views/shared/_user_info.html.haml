@@ -1,0 +1,18 @@
+%section#user_info_sec
+  .user_image_box
+    = image_link_to_user( user, { :size => '48x48' }, { :title => user.name })
+  .user_description_box
+    .user_info
+      %h1#user_name
+        == #{user.subname} (#{link_to_user_external user})
+      %ul.user_profile
+        %li.user_college= user.college || ''
+        %li.user_faculty= user.faculty || ''
+        %li.user_entered_at= "平成#{user.entered_at || ''}年度入学"
+    %ul.user_activity_info
+      %li.user_reviews
+        = link_to user.reviews.count, user_reviews_path(user.name), :class => 'count'
+        %div レビュー
+      %li.user_posts
+        = link_to user.posts.count, user_posts_path(user.name)
+        %div コメント

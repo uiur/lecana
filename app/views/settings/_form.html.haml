@@ -1,0 +1,10 @@
+.setting_wrapper
+  = semantic_form_for @setting, :url => settings_path do |f|
+    = f.inputs do 
+      = f.input :college, :include_blank => false
+      #setting_faculties_select
+        = render 'faculties', :form => f
+      - years = [*(13..24)]
+      = f.input :entered_at, :as => :select, :include_blank => false, :collection => Hash[years.map {|year| '平成' + year.to_s + '年度'}.zip(years)]
+      = f.buttons do
+        = f.commit_button :label => 'OK', :button_html => { :class => 'setting_button_commit' }

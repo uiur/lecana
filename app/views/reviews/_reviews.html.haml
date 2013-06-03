@@ -1,0 +1,43 @@
+%ul#rev_list
+  - if reviews.size == 0
+    %li.rev_empty
+      %b 表示できるレビューはありません
+  - reviews.each do |review|
+    %li
+      .rev_left_column
+        .rev_author
+          %h2.rev_author_name= link_to_user review.user
+          %span.rev_author_image= image_link_to_user( review.user, { :size => '36x36' }, { :title => review.user.name })
+      .rev_right_column
+        .rev_header
+          - subject_link ||= false
+          - if subject_link
+            .rev_subject
+              %h1= link_to_subject review.subject
+          .rev_rate
+            .star_container
+              %dl
+                %dt 楽勝度
+                %dd
+                  .reviews_star{:rating => "#{review.rating}"}
+            .star_container
+              %dl
+                %dt 充実度
+                %dd
+                  .reviews_star{:rating => "#{review.rating2}"}
+        .rev_text
+          %p= auto_link simple_format(review.content), :html => { :target => '_blank'}
+        .rev_footer
+          .rev_fav
+            - if signed_in?
+              %div{ :class => "rev_fav_form", :id => "fav_form_#{review.class.to_s.underscore}_#{review.id}"}
+                = render 'shared/fav_form', :favable => review
+            .rev_fav_count
+              %div{:id => "favs_#{review.class.to_s.underscore}_#{review.id}"}
+                = render 'shared/favs', :favs => review.favs
+          .rev_info
+            .rev_remove
+              - if signed_in? && current_user.have?(review)
+                = link_to 'この投稿を削除...', subject_review_path(review.subject, review), :method => :delete, :confirm => 'このレビューを削除してよろしいですか？'
+            .rev_date
+              = link_to format_time(review.created_at), review_path(review)

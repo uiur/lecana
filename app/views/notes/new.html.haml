@@ -1,0 +1,238 @@
+.right_column
+  .content
+    .content_header
+      %h1#page_title パブリックノートを編集
+    %section#notefrm_sec
+      #notefrm_box
+        = form_for [@subject, @note] do |f|
+          = f.text_area :content, :class => 'note_text_area'
+          = f.submit '保存', :class => 'note_button_save'
+      #note_usage_box
+        %h2 つかいかた
+        %h3 段落
+        %p 空行は段落の区切りと見なされます。段落には以下のような指定が可能です。
+        %table
+          %thead
+            %tr
+              %th.usage_cell_textfile Textfile記法
+              %th.usage_cell_eg 表示例など
+          %tbody
+            %tr
+              %td.usage_cell_textfile
+                p=. センタリング
+              %td.usage_cell_eg
+                %p{:style => 'text-align: center;'} センタリング
+            %tr
+              %td.usage_cell_textfile
+                p(. 左インデント
+              %td.usage_cell_eg
+                %p{:style => 'padding-left: 1em;'} 左インデント
+            %tr
+              %td.usage_cell_textfile
+                bq.親譲りの無鉄砲で小供の時から損ばかりしている。...おやじが大きな眼をして二階ぐらいから飛び降りて腰を抜かす奴があるかと云ったから、この次は抜かさずに飛んで見せますと答えた。
+              %td.usage_cell_eg
+                %blockquote
+                  %p 親譲りの無鉄砲で小供の時から損ばかりしている。小学校に居る時分学校の二階から飛び降りて一週間ほど腰を抜かした事がある。なぜそんな無闇をしたと聞く人があるかも知れぬ。別段深い理由でもない。新築の二階から首を出していたら、同級生の一人が冗談に、いくら威張っても、そこから飛び降りる事は出来まい。弱虫やーい。と囃したからである。小使に負ぶさって帰って来た時、おやじが大きな眼をして二階ぐらいから飛び降りて腰を抜かす奴があるかと云ったから、この次は抜かさずに飛んで見せますと答えた。
+
+        %h3 文字スタイル
+        %table
+          %thead
+            %tr
+              %th.usage_cell_textfile Textfile記法
+              %th.usage_cell_eg 表示例など
+          %tbody
+            %tr
+              %td.usage_cell_textfile
+                *太字*
+              %td.usage_cell_eg
+                %strong 太字
+            %tr
+              %td.usage_cell_textfile
+                _斜体_
+              %td.usage_cell_eg
+                %em 斜体
+            %tr
+              %td.usage_cell_textfile
+                +下線+
+              %td.usage_cell_eg
+                %ins 下線
+            %tr
+              %td.usage_cell_textfile
+                ="-取り消し線-"
+              %td.usage_cell_eg
+                %del 取り消し線
+            %tr
+              %td.usage_cell_textfile
+                ??引用??
+              %td.usage_cell_eg
+                %cite 引用
+
+        %h3 見出し
+        %p 6段階の見出しが使用できます。.(ドット)のあとには半角空白を入れてください。
+        %table
+          %thead
+            %tr
+              %th.usage_cell_textfile Textfile記法
+              %th.usage_cell_eg 表示例など
+          %tbody
+            %tr
+              %td.usage_cell_textfile
+                h1. 見出し
+              %td.usage_cell_eg
+                %h1 見出し
+            %tr
+              %td.usage_cell_textfile
+                h2. 見出し
+              %td.usage_cell_eg
+                %h2 見出し
+            %tr
+              %td.usage_cell_textfile
+                h3. 見出し
+              %td.usage_cell_eg
+                %h3 見出し
+            %tr
+              %td.usage_cell_textfile
+                h4. 見出し
+              %td.usage_cell_eg
+                %h4 見出し
+            %tr
+              %td.usage_cell_textfile
+                h5. 見出し
+              %td.usage_cell_eg
+                %h5 見出し
+            %tr
+              %td.usage_cell_textfile
+                h6. 見出し
+              %td.usage_cell_eg
+                %h6 見出し
+
+        %h3 リスト
+        %p ※ *のあとには半角空白を入れてください。
+        %table
+          %thead
+            %tr
+              %th.usage_cell_textfile Textfile記法
+              %th.usage_cell_eg 表示例など
+          %tbody
+            %tr
+              %td.usage_cell_textfile
+                * アイテム1<br>
+                ** アイテム1.1<br>
+                ** アイテム1.2<br>
+                *** アイテム1.2.1<br>
+                *** アイテム1.2.2<br>
+                *** アイテム1.2.3<br>
+                ** アイテム1.3<br>
+                ** アイテム1.4<br>
+                * アイテム2<br>
+              %td.usage_cell_eg
+                %ul
+                  %li アイテム1
+                  %li
+                    %ul
+                      %li アイテム1.1
+                      %li アイテム1.2
+                      %li
+                        %ul
+                          %li アイテム1.2.1
+                          %li アイテム1.2.2
+                          %li アイテム1.2.3
+                      %li アイテム1.3
+                      %li アイテム1.4
+                  %li アイテム2
+            %tr
+              %td.usage_cell_textfile
+                \# その1<br>
+                \# その2<br>
+                \## その2.1<br>
+                \## その2.2<br>
+                \## その2.3<br>
+                \# その3<br>
+                \## その3.1<br>
+                \### その3.1.1<br>
+                \### その3.1.2<br>
+              %td.usage_cell_eg
+                %ol
+                  %li その1
+                  %li その2
+                  %ol
+                    %li その2.1
+                    %li その2.2
+                    %li その2.3
+                  %liその3
+                  %ol
+                    %li その3.1
+                    %li
+                      %ol
+                        %li その3.1.1
+                        %li その3.1.2
+
+        %h3 表
+        %table
+          %thead
+            %tr
+              %th.usage_cell_textfile Textfile記法
+              %th.usage_cell_eg 表示例など
+          %tbody
+            %tr
+              %td.usage_cell_textfile
+                |ID|担当|<br>
+                |uiureo|開発|<br>
+                |tnn_jp|デザイン|<br>
+                |hidesys|インドネシア|<br>
+              %td.usage_cell_eg
+                %table
+                  %tr
+                    %td ID
+                    %td 担当
+                  %tr
+                    %td uiureo
+                    %td 開発
+                  %tr
+                    %td tnn_jp
+                    %td デザイン
+                  %tr
+                    %td hidesys
+                    %td インドネシア
+            %tr
+              %td.usage_cell_textfile
+                |_. ID|_. 担当|<br>
+                |uiureo|開発|<br>
+                |tnn_jp|デザイン|<br>
+                |hidesys|インドネシア|<br>
+              %td.usage_cell_eg
+                %table
+                  %tr
+                    %th ID
+                    %th 担当
+                  %tr
+                    %td uiureo
+                    %td 開発
+                  %tr
+                    %td tnn_jp
+                    %td デザイン
+                  %tr
+                    %td hidesys
+                    %td インドネシア
+            %tr
+              %td.usage_cell_textfile
+                |/2 colspan|行1|<br>
+                |行2|<br>
+              %td.usage_cell_eg
+                %table
+                  %tr
+                    %td{:colspan => '2'} colspan
+                  %tr
+                    %td 列1
+                    %td 列2
+            %tr
+              %td.usage_cell_textfile
+                |\2 colspan|<br>
+                |列1|列2|<br>
+              %td.usage_cell_eg
+                %table
+                  %tr
+                    %td{:rowspan => '2'} rowspan
+                    %td 行1
+                  %tr
+                    %td 行2

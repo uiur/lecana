@@ -1,0 +1,18 @@
+#users_box
+  - if users.size == 0
+    .users_box_empty
+      %b 該当するユーザーは見つかりませんでした
+      %p 他のキーワードで検索してみてください
+  - else
+    %table#users_table
+      - users.each do |user|
+        %tr.users_row
+          %td.users_cell_image= image_link_to_user user
+          %td.users_cell_name
+            .user_name= link_to_user user
+          %td.users_cell_info
+            %dl
+              %dt 大学
+              %dd= user.college || ''
+              %dt 学部学科
+              %dd= user.faculty || ''

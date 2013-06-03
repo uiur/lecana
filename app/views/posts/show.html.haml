@@ -1,0 +1,27 @@
+= no_sidebar
+.permalink_column
+  #post_box
+    .post_container
+      .post_left_column
+        .post_author
+          %h2.post_author_name= link_to_user @post.user
+          %span.post_author_image= image_link_to_user( @post.user, { :size => '36x36' }, { :title => @post.user.name })
+      .post_right_column
+        .post_text
+          %p= auto_link @post.content, :html => { :target => '_blank'}
+        .post_footer
+          .post_fav
+            - if signed_in?
+              %div{:id => "fav_form_#{@post.class.to_s.underscore}_#{@post.id}", :class => "post_fav_form"}
+                = render 'shared/fav_form', :favable => @post
+            .post_fav_count
+              %div{:id => "favs_#{@post.class.to_s.underscore}_#{@post.id}", :class => "box_favs"}
+                = render 'shared/favs', :favs => @post.favs
+          .post_info
+            .post_remove
+              - if signed_in? && current_user.have?(@post)
+                = link_to 'この投稿を削除...', post_path(@post), :method => :delete, :confirm => 'この投稿を削除してよろしいですか？'
+            - if @post.subject
+              .post_subject
+                = link_to_subject @post.subject
+            .post_date= format_time(@post.created_at)

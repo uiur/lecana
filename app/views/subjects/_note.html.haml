@@ -1,0 +1,25 @@
+- subject ||= note.subject
+.note_header
+  - if signed_in?
+    %span#note_box_login
+      - if note
+        = link_to 'このノートを編集...', new_subject_note_path(subject), { :class => 'note_button note_button_edit'}
+      - else
+        = link_to 'ノートを新規作成...', new_subject_note_path(subject), { :class => 'note_button note_button_add'}  
+- if note
+  .note_content
+    = raw note.to_html
+
+  .note_footer
+    .note_info= link_to 'このノートの情報...', subject_notes_path(subject)
+    .note_fav
+      - if signed_in?
+        %div{  :class => "note_fav_form", :id => "fav_form_#{note.class.to_s.underscore}_#{note.id}" }
+          = render 'shared/fav_form', :favable => note
+      .rev_fav_count
+        %div{:id => "favs_#{note.class.to_s.underscore}_#{note.id}"}
+          = render 'shared/favs', :favs => note.favs
+-else
+  .note_empty
+    %b ノートはまだ書かれていません
+    %p 最初の編集者になってください

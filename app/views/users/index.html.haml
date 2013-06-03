@@ -1,0 +1,13 @@
+.right_column
+  %section#users_sec
+    #searchfrm_box
+      %h2 ユーザーを検索
+      %fieldset
+        = form_tag users_path, :method => :get do
+          .searchfrm_input_wrapper
+            = text_field_tag :search, params[:search], :class => 'searchfrm_input'
+            = submit_tag '検索', :name => nil, :class => 'searchfrm_button'
+
+    = render 'shared/users', {:users => @users}
+    = paginate @users
+

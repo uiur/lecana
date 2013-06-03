@@ -1,0 +1,108 @@
+- @day_no = 1..5
+- @hour_no = 1..5
+
+%section#stt_sec
+  #stt_nav
+    %a#stt_button_pulldown メニュー
+    %ul
+      - [*(2011..YEAR)].each do |y|
+        - [1,2].each do |t|
+          - if params[:term].to_i == t && params[:year].to_i == y
+            %li.current_term= "#{y}年度#{Term.detect(ord: t)}"
+          - else
+            %li= link_to "#{y}年度#{Term.detect(ord: t)}", params.merge(:year => y, :term => t)
+  #stt_box
+    %h2= "#{params[:year]}年度#{Term.detect(ord: params[:term])}"
+    %nav#stt_nav_day
+      %ul{class: "stt_nav_#{@day_no.to_a.size}_days"}
+        - @day_no.each do |day_no|
+          %li
+            %a{id: 'stt_button_day_' + day_no.to_s}= day(day_no)
+        %li
+          %a#stt_button_other 他
+        %li
+          %a#stt_button_viewall 一覧
+  
+    #stt_table_wrapper
+      - @day_no.each do |day_no|
+        %table{id: 'stt_table_' + day_no.to_s}
+          - @hour_no.each do |hour_no|
+            %tr{class: 'stt_row_h_' + hour_no.to_s}
+              %td.stt_cell_hour= hour_no
+              %td.stt_cell_info
+                .stt_box_item{class: 'stt_box_item_' + day_no.to_s + '-' + hour_no.to_s}
+                  - if timetable[Period.detect(day: day_no, ord: hour_no)].any?
+                    - timetable[Period.detect(day: day_no, ord: hour_no)].each_with_index do |info,i|
+                      - if (i == 0)
+                        .stt_box_lecture.stt_current_lecture
+                          .stt_box_name= link_to_subject info.subject, { :class => 'vtip', :title => info.subject.name }
+                          .stt_box_data
+                            %dl
+                              %dt 場所
+                              %dd= info.room
+                              %dt 教員
+                              %dd= info.subject.teachers.map(&:name).join(', ')
+                      - else
+                        .stt_box_lecture
+                          .stt_box_name= link_to_subject info.subject, { :class => 'vtip', :title => info.subject.name }
+                          .stt_box_data
+                            %dl
+                              %dt 場所
+                              %dd= info.room
+                              %dt 教員
+                              %dd= info.subject.teachers.map(&:name).join(', ')
+                  - else
+                    .stt_box_empty
+                      = link_to '講義を追加', subjects_path(:search => Period.detect(:day => day_no, :ord => hour_no).to_s, :year => params[:year], "term_#{params[:term]}".intern => true)
+
+                .stt_nav_item
+                  = link_to '+', subjects_path(:search => Period.detect(:day => day_no, :ord => hour_no).to_s), { :class => 'stt_button_add_lecture vtip', :title => '講義を追加'}
+                  %a{ class: 'stt_button_prev_lecture vtip', title: '前の講義' } 前の講義
+                  %a{ class: 'stt_button_next_lecture vtip', title: '次の講義' } 次の講義
+
+      %table#stt_table_other
+        - timetable[Period.detect(Period::OTHER)].each do |info|
+          %tr
+            %td.stt_cell_info
+              .stt_box_item
+                .stt_box_lecture.stt_current_lecture
+                  .stt_box_name
+                    = link_to_subject info.subject
+                  .stt_box_data
+                    %dl
+                      %dt 場所
+                      %dd= info.room
+                      %dt 教員
+                      %dd= info.teacher_names.join(', ')   
+        %tr
+          %td
+            .stt_box_empty
+              = link_to '[+] 講義を追加', subjects_path(:search => Period.detect(Period::OTHER).to_s)
+
+            
+    #stt_popup_timetable_wrapper
+      #stt_popup_timetable_content
+        %a#stt_button_close_popup_timetable ×
+        %table
+          %thead
+            %tr
+              %td.stt_cell_blank
+              - @day_no.each do |day_no|
+                %th.stt_cell_day= day(day_no)
+          %tbody
+            - @hour_no.each do |hour_no|
+              %tr
+                %th.stt_cell_hour= hour_no
+                - @day_no.each do |day_no|
+                  %td.stt_cell_info
+                    .stt_box_item
+                      - if timetable[Period.detect(day: day_no, ord: hour_no)].any?
+                        - timetable[Period.detect(day: day_no, ord: hour_no)].each do |info|
+                          .stt_box_lecture
+                            .stt_box_name= link_to_subject info.subject, { :class => 'vtip', :title => info.subject.name }
+                            .stt_box_data
+                              %dl
+                                %dt 場所
+                                %dd= info.room
+                                %dt 教員
+                                %dd= info.subject.teachers.map(&:name).join(', ')

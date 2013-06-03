@@ -1,0 +1,9 @@
+= no_sidebar
+= semantic_form_for @setting do |f|
+  = f.inputs do 
+    = f.input :college
+    #faculties_select
+      = render 'faculties', :form => f
+    - years = [*(13..24)]
+    = f.input :entered_at, :as => :select, :collection => Hash[years.map {|year| '平成' + year.to_s + '年度'}.zip(years)]
+  = f.buttons :commit

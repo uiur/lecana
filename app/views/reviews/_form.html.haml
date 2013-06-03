@@ -1,0 +1,20 @@
+= semantic_form_for [subject, review] do |f|
+  = f.inputs do
+    .star_container
+      楽勝度
+      #star
+    .star2_container
+      充実度
+      #star2
+    = f.input :rating, :as => :hidden, :label => false
+    = f.input :rating2, :as => :hidden, :label => false
+    .revfrm_content
+      = f.input :content, :label => false, :input_html => { :class => 'revfrm_input_content', :rows => 3, :placeholder => 'あなたの感想'  }
+
+    #post_do_post_to_external_input
+      = check_box_tag :do_post_to_external, "1", true
+      %label(for="do_post_to_external")
+        == #{current_user.auth.provider.camelize}にも投稿する
+
+  = f.buttons do
+    = f.commit_button :label => '投稿', :button_html => { :class => 'revfrm_button_commit' }

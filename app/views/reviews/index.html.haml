@@ -1,0 +1,9 @@
+= content_for :title do
+  = "#{@user.name}のレビュー"
+.right_column
+  .content
+    = render 'shared/user_info', :user => @user
+    %section#reviews_sec
+      %h1= "#{@user.name}のレビュー"
+      #rev_box.index
+        = render 'reviews', :reviews => @reviews, :subject_link => true

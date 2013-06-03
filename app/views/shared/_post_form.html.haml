@@ -1,0 +1,12 @@
+- subject ||= false   # この行がないとなんかうまくいかない
+- ff = subject ? [subject, post] : post
+
+= semantic_form_for ff, :remote => true do |f|  
+  = f.inputs do
+    = f.input :content, :label => '内容', :input_html => { :class => 'postfrm_textarea', :rows => 2, :cols => 100, :placeholder => '授業についてつぶやく' }
+    #post_do_post_to_external_input
+      = check_box_tag :do_post_to_external, "1", true
+      %label(for="do_post_to_external")
+        == #{current_user.auth.provider.camelize}にも投稿する
+  = f.buttons do
+    = f.commit_button :label => '投稿', :button_html => { :class => 'postfrm_button_commit' }

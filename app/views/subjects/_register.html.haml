@@ -1,0 +1,11 @@
+- if signed_in?
+  - info = subject.info(year)
+  - if info
+    - if current_user.registered?(info)
+      = form_tag remove_subject_path(subject), :remote => true do
+        = hidden_field_tag :year, year
+        = submit_tag "時間割から削除", :class => 'remove_button'
+    - else
+      = form_tag register_subject_path(subject), :remote => true do
+        = hidden_field_tag :year, year
+        = submit_tag "時間割に追加", :class => 'register_button'

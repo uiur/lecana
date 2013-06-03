@@ -1,0 +1,6 @@
+= label :setting, :faculty_id, '所属学部'
+.input
+  - if faculties.blank?
+    = select :setting, 'faculty_id', Faculty.all.map {|f| [f.to_s, f.id]}
+  - else
+    = select :setting, 'faculty_id', faculties.map {|f| [f.to_s, f.id]}

@@ -1,0 +1,30 @@
+= content_for :title do
+  = "#{@user.name}の時間割"
+.right_column
+  .content
+    = render 'shared/user_info', :user => @user
+    %section#tt_sec
+      %h1= "#{@user.subname}さんの時間割"
+      #tt_nav
+        %a#tt_button_pulldown メニュー
+        %ul
+          - [*(2011..YEAR)].each do |y|
+            - [1,2].each do |t|
+              - if params[:term].to_i == t && params[:year].to_i == y
+                %li.current_term= "#{y}年度#{Term.detect(ord: t)}"
+              - else
+                %li= link_to "#{y}年度#{Term.detect(ord: t)}", params.merge(:year => y, :term => t)
+          - if signed_in? && @user != current_user
+            %li.separate_before= button_to("この人の時間割をコピー",
+                        user_copy_timetable_path(:user_id => @user.id, :year => params[:year], :term => params[:term]), :class => 'tt_button_copy',
+                        :confirm => "#{@user.name} の #{params[:year]}年度#{Term.detect(ord: params[:term])} 時間割一覧をあなたの今年の時間割にコピーします")
+      = render 'timetable'
+
+      #similar_users_box
+        %h2 時間割の似ているユーザー
+        = render 'shared/user_images', {:users => User.similar_to(@user), :size => '24x24'}
+  
+    %section
+      %h1= "#{@user.subname}さんの最近のアクティビティ"
+      #activity_box
+        = render 'shared/activities', :activities => @activities

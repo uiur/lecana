@@ -1,0 +1,46 @@
+- if activities.size > 0
+  - activities.each do |activity|
+    - if activity.target.class == Post
+      - post = activity.target
+      .post_container
+        .post_left_column
+          .post_author
+            %h2.post_author_name= link_to_user post.user
+            %span.post_author_image= image_link_to_user( post.user, { :size => '36x36' }, { :title => post.user.name })
+        .post_right_column
+          .post_text
+            %p= auto_link post.content, :html => { :target => '_blank'}
+          .post_footer
+            .post_fav
+              - if signed_in?
+                %div{:id => "fav_form_#{post.class.to_s.underscore}_#{post.id}", :class => "post_fav_form"}
+                  = render 'shared/fav_form', :favable => post
+              .post_fav_count
+                %div{:id => "favs_#{post.class.to_s.underscore}_#{post.id}", :class => "box_favs"}
+                  = render 'shared/favs', :favs => post.favs
+            .post_info
+              .post_remove
+                - if signed_in? && current_user.have?(post)
+                  = link_to 'この投稿を削除...', post_path(post), :method => :delete, :confirm => 'この投稿を削除してよろしいですか？'
+              - if post.subject
+                .post_subject
+                  = link_to_subject post.subject
+              .post_date
+                = link_to format_time(post.created_at), post_path(post)
+    - else 
+      .activity_container
+        .activity_left_column
+          .activity_author
+            %h2.activity_author_name= link_to_user activity.user
+            %span.activity_author_image= image_link_to_user( activity.user, { :size => '36x36' }, { :title => activity.user.name })
+        .activity_right_column
+          .activity_header= activity_label(activity)
+          .activity_text
+            %p= truncate activity.content, :length => 200
+          .activity_footer
+            .activity_info
+              .activity_date
+                = format_time(activity.created_at)
+- else
+  #activity_box_empty
+    %b 表示するものがありません。
